@@ -48,7 +48,7 @@ The repository also includes a robust backend and utility libraries for seamless
 1. Clone the repository:
    ```bash
    git clone git@github.com:AgoriaNetwork/lit-agents.git
-   cd litagents
+   cd lit-agents
    ```
 
 2. Install dependencies:
