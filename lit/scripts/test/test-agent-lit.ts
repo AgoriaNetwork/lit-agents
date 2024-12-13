@@ -50,7 +50,7 @@ export const testFillOrderAction = async () => {
       jsParams: {
         encryptedParams,
         accessControlConditions: access,
-        prompt: 'what do you thinnk about $VIRTUAL?',
+        prompt: 'Buy VIRTUAL',
       },
     });
 

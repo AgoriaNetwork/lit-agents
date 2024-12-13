@@ -5,6 +5,7 @@ import { LitAgentsContract } from '../evm/lit-agents/lit-agents';
 import { IExecutionHandler } from '../lit-services/execution-handler/execution-handler.interface';
 import { Codex } from '../token-details/token-details';
 import { getOdosQuote } from '../token-odos/odos-token-purchase';
+import { Erc20Service } from '../evm/lit-agents/erc20.service';
 
 export class AgentRuntime {
   constructor(
@@ -103,12 +104,31 @@ export class AgentRuntime {
               call.function.arguments,
             );
 
-            const quote = await getOdosQuote(tokenIn, tokenOut, amountIn);
+            const quote = await getOdosQuote(
+              address,
+              tokenIn,
+              tokenOut,
+              amountIn,
+            );
             console.log('Quote:', quote);
+            const nonce = await this.executionHandler.getNonce();
+
+            const erc20 = new Erc20Service(
+              tokenIn,
+              this.executionHandler.getProvider(),
+            );
+            const approvalTx = await erc20.prepApproveTx(
+              quote.transaction.to,
+              amountIn,
+            );
+            await this.executionHandler.executeEvm({ ...approvalTx, nonce });
             const tx = await this.executionHandler.executeEvm({
-              to: quote.swapAddress,
-              data: quote.txData,
-              value: ethers.utils.parseEther(quote.value || '0').toString(),
+              to: quote.transaction.to,
+              data: quote.transaction.data,
+              value: ethers.utils
+                .parseEther(quote.transaction.value || '0')
+                .toString(),
+              nonce: nonce + 1,
             });
             results.push({
               function: call.function.name,

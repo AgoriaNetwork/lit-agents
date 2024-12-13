@@ -5,4 +5,5 @@ export type EvmArbitraryCall = {
   value: string;
   gasPrice?: string;
   gasLimit?: string;
+  nonce?: number;
 };

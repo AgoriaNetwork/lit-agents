@@ -23,6 +23,10 @@ export class ExecutionHandlerLit implements IExecutionHandler {
     return wallet.address;
   }
 
+  public getNonce(): Promise<number> {
+    return this.getProvider().getTransactionCount(this.getAddress());
+  }
+
   public async executeEvm(executionData: EvmArbitraryCall): Promise<string> {
     const provider = this.getProvider();
     const wallet = new ethers.Wallet(this.privateKey, provider);
@@ -35,7 +39,9 @@ export class ExecutionHandlerLit implements IExecutionHandler {
           to: executionData.to,
           data: executionData.data,
           value: executionData.value,
-          nonce: await provider.getTransactionCount(wallet.address),
+          nonce:
+            executionData.nonce ||
+            (await provider.getTransactionCount(wallet.address)),
           gasPrice: executionData.gasPrice || (await provider.getGasPrice()),
         };
 
@@ -78,7 +84,7 @@ export class ExecutionHandlerLit implements IExecutionHandler {
     return resp;
   }
 
-  protected getProvider(): ethers.providers.JsonRpcProvider {
+  public getProvider(): ethers.providers.JsonRpcProvider {
     return new ethers.providers.JsonRpcProvider(
       this.rpcUrls[this.rpcUrls.length - 1],
     );

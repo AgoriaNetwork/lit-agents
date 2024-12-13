@@ -6,10 +6,12 @@ export const getWalletAuthSig = async (wallet: ethers.Wallet | string) => {
     wallet = new ethers.Wallet(wallet);
   }
   const now = new Date().toISOString().slice(0, 19).replace('T', ' ');
-  const origin = 'https://tradegenius.com';
+  const origin = 'https://whatever.com';
   const message = `Generate a server auth signature for ${wallet.address} at ${now}`;
   const statement = message;
-  const expirationTime = new Date(Date.now() + 1000 * 60 * 60 * 24 * 30).toISOString();
+  const expirationTime = new Date(
+    Date.now() + 1000 * 60 * 60 * 24 * 30,
+  ).toISOString();
 
   const siweMessage = new SiweMessage({
     domain: 'node',
