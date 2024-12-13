@@ -1,0 +1,12 @@
+export enum ChainId {
+  UNKNOWN = 0,
+  BASE = 8453,
+  SOLANA = 1399811149,
+  ARBITRUM = 42161,
+  OPTIMISM = 10,
+  POLYGON = 137,
+  BSC = 56,
+  AVALANCHE = 43114,
+  BLAST = 81457,
+  ETHEREUM = 1,
+}
